@@ -16,6 +16,8 @@
 ##   
 ##    Be sure to install the package 'keyring' before running this code
 #install.packages('keyring')
+##
+##    Oracle connection code courtesy of Anna Shipunova
 ## ---------------------------
 ## Set Working Directory
 ##
@@ -53,3 +55,17 @@ kr$set(
 
 ## Lock the keyring
 kr$keyring_lock(krName)
+
+## To use the credentials to log in to Oracle
+con_sole=dbConnect(
+  odbc::odbc(),
+  .connection_string=paste0(
+    "DRIVER={Oracle in instantclient_12_2};DBQ=sole.nefsc.noaa.gov:1526/sole;UID=gmaynard;PWD=",
+    keyring::backend_file$new()$get(
+      service="SOLE",
+      user="gmaynard",
+      keyring="GMaynard_keyring"
+    )
+  ),
+  timeout=10
+)
