@@ -1,7 +1,8 @@
 ## ---------------------------
-## Script name: 
+## Script name: FLDRS_Vessels.R
 ##
-## Purpose of script:
+## Purpose of script: Download a list of vessels that are currently using FLDRS
+##    and categorize them by program code and groundfish sector (if applicable)
 ##
 ## Author: George A. Maynard
 ##
@@ -26,11 +27,35 @@ library(odbc)
 library(DBI)
 library(lubridate)
 library(dplyr)
+library(keyring)
 ## ---------------------------
 ## Load necessary functions
 ##
 ## ---------------------------
-## Add connection lines here...
+con_sole=dbConnect(
+  odbc::odbc(),
+  .connection_string=paste0(
+    "DRIVER={Oracle in instantclient_12_2};DBQ=sole.nefsc.noaa.gov:1526/sole;UID=gmaynard;PWD=",
+    keyring::backend_file$new()$get(
+      service="SOLE",
+      user="gmaynard",
+      keyring="GMaynard_keyring"
+    )
+  ),
+  timeout=10
+)
+con_nova=dbConnect(
+  odbc::odbc(),
+  .connection_string=paste0(
+    "DRIVER={Oracle in instantclient_12_2};DBQ=sole.nefsc.noaa.gov:1526/sole;UID=gmaynard;PWD=",
+    keyring::backend_file$new()$get(
+      service="SOLE",
+      user="gmaynard",
+      keyring="GMaynard_keyring"
+    )
+  ),
+  timeout=10
+)
 
 VP=dbGetQuery(
   con_sole,
