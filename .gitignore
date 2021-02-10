@@ -1,2 +1,7 @@
 *.Rproj
 .Rproj.user
+
+## Do not publish any resulting datatables
+*.csv
+*.xls
+*.xlsx
