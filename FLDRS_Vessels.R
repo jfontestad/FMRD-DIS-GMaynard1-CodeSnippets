@@ -163,6 +163,85 @@ programs=dbGetQuery(
   con_sole,
   'SELECT * FROM FVTR.VERS_PROGRAMS'
 )
+
+## Select only those programs that exist within the FLDRS data
+programs=subset(
+  programs,
+  programs$PROGRAM_CODE%in%unique(
+    strsplit(
+      paste(
+        VesselData$ProgramCodes,
+        sep=",",
+        collapse=","
+        ),
+      ","
+      )[[1]]
+    )
+  )
+
+## Read in FLDRS trip submission data
+trips=dbGetQuery(
+  con_sole,
+  'SELECT * FROM FVTR.VERS_TRIP_LIST'
+)
+
+## Format the trip upload dates to datetime objects
+trips$SailDate=ymd_hms(trips$SAIL_DATE_LCL)
+trips$UploadDate=ymd_hms(trips$UPLOAD_DATE_LCL)
+
+## Subset out only those trips that have taken place within the last six months
+target=Sys.Date()-months(12)
+trips=subset(
+  trips,
+  trips$SailDate>=target|trips$UploadDate>=target
+)
+
+## Add columns to the VesselData table indicating the most recent trip for each
+##    vessel and the trip type
+VesselData$MostRecent=NA
+VesselData$EVTR=NA
+VesselData$SECTORTRIP=NA
+VesselData$STFLT=NA
+VesselData$NCRP=NA
+VesselData$ECLAMS=NA
+VesselData$EM=NA
+for(i in 1:nrow(VesselData)){
+  x=subset(
+    trips,
+    trips$VESSEL_HULL_ID==VesselData$HullNumber[i]
+  )
+  VesselData$MostRecent[i]=ifelse(
+    nrow(x)==0,
+    NA,
+    as.character(max(c(x$SailDate,x$UploadDate)))
+  )
+  if(nrow(x)!=0){
+    if(max(c(x$SailDate,x$UploadDate))%in%c(x$UploadDate)){
+      y=x[which(x$UploadDate==max(x$UploadDate)),]
+    } else {
+      if(max(c(x$SailDate,x$UploadDate))%in%c(x$SailDate)){
+        y=x[which(x$SailDate==max(x$SailDate)),]
+      }
+    }
+  } else {
+    y=rep(NA,ncol(x))
+  }
+  if(sum(is.na(y))<ncol(x)){
+    VesselData$EVTR[i]=y$EVTR
+    VesselData$SECTORTRIP[i]=y$SECTOR
+    VesselData$STFLT[i]=y$STFLT
+    VesselData$NCRP[i]=y$NCRP
+    VesselData$ECLAMS[i]=y$ECLAMS
+    VesselData$EM[i]=y$EM
+  } else {
+    VesselData$EVTR[i]=NA
+    VesselData$SECTORTRIP[i]=NA
+    VesselData$STFLT[i]=NA
+    VesselData$NCRP[i]=NA
+    VesselData$ECLAMS[i]=NA
+    VesselData$EM[i]=NA
+  }
+}
 ## Export the data to an excel spreadsheet for the end users
 write_xlsx(
   list(VesselData,SECTOR,VES,VP,programs),
