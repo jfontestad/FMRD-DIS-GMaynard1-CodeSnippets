@@ -62,7 +62,7 @@ con_nova=dbConnect(
 )
 
 ## Lock the keyring
-kr$keyring_lock("GMaynard_keyring")
+keyring_lock("GMaynard_keyring")
 
 ## Query a data frame of all vessels, their program codes, and expiration dates
 VP=dbGetQuery(
@@ -75,9 +75,10 @@ VP$VVP_END_DATE=ymd_hms(VP$VVP_END_DATE)
 
 ## Select only those vessel/program lines with a NA value in the expiration date
 ##    column (i.e., only those vessels that are active in at least one program)
+##    or those that have become inactive in the last year. 
 VP=subset(
   VP,
-  is.na(VP$VVP_END_DATE)
+  is.na(VP$VVP_END_DATE)|VP$VVP_END_DATE>=ymd("2020-01-01")
 )
 
 ## Download a data frame of vessel permit information
@@ -155,7 +156,7 @@ for(i in unique(new$ID)){
 ## Remove known test vessels from the dataset
 VesselData=subset(
   VesselData,
-  VesselData$VesselName%in%c("TENNESSEE JED","STELLA BLUE")==FALSE
+  VesselData$VesselName%in%c("TENNESSEE JED","STELLA BLUE","CHINA CAT SUNFLOWER")==FALSE
 )
 
 ## Read in a list of program codes to support the data
@@ -242,8 +243,40 @@ for(i in 1:nrow(VesselData)){
     VesselData$EM[i]=NA
   }
 }
+## Create a table of total participating vessels by type
+totals=data.frame(
+  desc=c(
+    "all vessels (including inactive)",
+    "vessels that have submitted data through FLDRS since 2020-01-01",
+    "vessels that have submitted an eVTR through FLDRS since 2020-01-01",
+    "vessels participating in study fleet programs",
+    "vessels participating in cooperative research (unpaid)",
+    "clam vessels using FLDRS",
+    "electronic monitoring participants using FLDRS"
+  ),
+  totalVessels=c(
+    nrow(VesselData),
+    nrow(subset(
+      VesselData,
+      (VesselData$EVTR+VesselData$SECTORTRIP+VesselData$STFLT+VesselData$NCRP+VesselData$ECLAMS+VesselData$EM)>0
+      )
+    ),
+    sum(VesselData$EVTR,na.rm=TRUE),
+    sum(VesselData$STFLT,na.rm=TRUE),
+    sum(VesselData$NCRP,na.rm=TRUE),
+    sum(VesselData$ECLAMS,na.rm=TRUE),
+    sum(VesselData$EM,na.rm=TRUE)
+  )
+)
 ## Export the data to an excel spreadsheet for the end users
 write_xlsx(
-  list(VesselData,SECTOR,VES,VP,programs),
+  list(
+    Totals=totals,
+    VesselData=VesselData,
+    SectorAffiliations=SECTOR,
+    VesselIdentifiers=VES,
+    ProgramParticipation=VP,
+    ProgramCodes=programs
+    ),
   path="VesselData.xlsx"
   )
