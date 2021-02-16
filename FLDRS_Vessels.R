@@ -129,9 +129,16 @@ SECTOR$ID=gsub(
 VesselData=data.frame(
   VesselName=as.character(),
   HullNumber=as.character(),
+  PermitNumber=as.character(),
   SectorMember=as.character(),
   Sector=as.character(),
   ProgramCodes=as.character()
+)
+
+## Remove known test vessels from the dataset
+new=subset(
+  new,
+  new$VESSEL_NAME%in%c("TENNESSEE JED","STELLA BLUE","CHINA CAT SUNFLOWER")==FALSE
 )
 
 ## Loop over each unique vessel in the merged data frame
@@ -142,6 +149,7 @@ for(i in unique(new$ID)){
   newLine=data.frame(
     VesselName=unique(x$VESSEL_NAME),
     HullNumber=unique(x$VESSEL_HULL_ID),
+    PermitNumber=unique(x$VESSEL_PERMIT_NUM),
     SectorMember=as.character(i%in%SECTOR$ID),
     Sector=ifelse(
       i%in%SECTOR$ID,
@@ -152,12 +160,6 @@ for(i in unique(new$ID)){
   ## Add the new line to the final data frame
   VesselData=rbind(VesselData,newLine)
 }
-
-## Remove known test vessels from the dataset
-VesselData=subset(
-  VesselData,
-  VesselData$VesselName%in%c("TENNESSEE JED","STELLA BLUE","CHINA CAT SUNFLOWER")==FALSE
-)
 
 ## Read in a list of program codes to support the data
 programs=dbGetQuery(
@@ -190,7 +192,7 @@ trips=dbGetQuery(
 trips$SailDate=ymd_hms(trips$SAIL_DATE_LCL)
 trips$UploadDate=ymd_hms(trips$UPLOAD_DATE_LCL)
 
-## Subset out only those trips that have taken place within the last six months
+## Subset out only those trips that have taken place within the last twelve months
 target=Sys.Date()-months(12)
 trips=subset(
   trips,
@@ -200,6 +202,7 @@ trips=subset(
 ## Add columns to the VesselData table indicating the most recent trip for each
 ##    vessel and the trip type
 VesselData$MostRecent=NA
+VesselData$MR_EVTR=NA
 VesselData$EVTR=NA
 VesselData$SECTORTRIP=NA
 VesselData$STFLT=NA
@@ -215,6 +218,11 @@ for(i in 1:nrow(VesselData)){
     nrow(x)==0,
     NA,
     as.character(max(c(x$SailDate,x$UploadDate)))
+  )
+  VesselData$MR_EVTR[i]=ifelse(
+    sum(x$EVTR)>0,
+    as.character(max(subset(x,x$EVTR==1)$UploadDate)),
+    NA
   )
   if(nrow(x)!=0){
     if(max(c(x$SailDate,x$UploadDate))%in%c(x$UploadDate)){
@@ -268,11 +276,38 @@ totals=data.frame(
     sum(VesselData$EM,na.rm=TRUE)
   )
 )
+
+## Create a new table of programs and vessel participation
+vps=matrix(nrow=nrow(VesselData),ncol=nrow(programs)+2)
+vps=as.data.frame(vps)
+colnames(vps)=c("VesselName","VID",programs$PROGRAM_DESCR)
+for(i in 1:nrow(VesselData)){
+  vps[i,1]=VesselData$VesselName[i]
+  vps[i,2]=gsub(
+    pattern=" ",
+    replacement="",
+    x=paste0(VesselData$VesselName[i],VesselData$HullNumber[i])
+  )
+  for(j in colnames(vps)[3:ncol(vps)]){
+    vps[i,j]=grepl(programs$PROGRAM_CODE[which(programs$PROGRAM_DESCR==j)],VesselData$ProgramCodes[i])
+  }
+}
+
+## Create an Identifier column by concatenating vessel name and hull number
+##    in the vessel data frame
+VesselData$VID=gsub(" ","",paste0(VesselData$VesselName,VesselData$HullNumber))
+
+## Use the Identifier column (VID) to merge vessel data and program data
+x=merge(VesselData,vps)
+
+## Clean up the data frame
+x$VID=NULL
+
 ## Export the data to an excel spreadsheet for the end users
 write_xlsx(
   list(
     Totals=totals,
-    VesselData=VesselData,
+    VesselData=x,
     SectorAffiliations=SECTOR,
     VesselIdentifiers=VES,
     ProgramParticipation=VP,
