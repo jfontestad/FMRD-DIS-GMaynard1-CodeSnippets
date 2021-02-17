@@ -32,9 +32,9 @@ con=dbConnect(
   file.choose()
   )
 ## Show a list of tables
-dbListTables(con)
+# dbListTables(con)
 ## Fetch data from a table
-tb=dbReadTable(
-  conn=con,
-  name="TableNameHere"
-)
+# tb=dbReadTable(
+#   conn=con,
+#   name="TableNameHere"
+# )
