@@ -21,7 +21,7 @@
 options(scipen = 6, digits = 4)
 ## ---------------------------
 ## Load necessary packages
-library(RSQLite)
+#library(RSQLite)
 ## ---------------------------
 ## Load necessary functions
 ##
