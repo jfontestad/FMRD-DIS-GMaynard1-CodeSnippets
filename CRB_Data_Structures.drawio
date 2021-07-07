@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2021-07-07T14:33:22.375Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36" etag="FpifaI54_o8CBr7yKfXN" version="14.8.4" type="github">
+<mxfile host="app.diagrams.net" modified="2021-07-07T14:47:25.543Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36" etag="iLc9qsNp2EMOb_AOVs2b" version="14.8.4" type="github">
   <diagram name="Page-1" id="b98fa263-6416-c6ec-5b7d-78bf54ef71d0">
-    <mxGraphModel dx="2844" dy="2763" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1.5" pageWidth="1169" pageHeight="826" background="none" math="0" shadow="0">
+    <mxGraphModel dx="2031" dy="2328" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1.5" pageWidth="1169" pageHeight="826" background="none" math="0" shadow="0">
       <root>
         <mxCell id="0" style=";html=1;" />
         <mxCell id="1" style=";html=1;" parent="0" />
@@ -793,6 +793,39 @@
         </mxCell>
         <mxCell id="g33Lg_bU7zl-0KTu_dWb-169" value="eMOLT" style="swimlane;" vertex="1" parent="1">
           <mxGeometry x="1680" y="-1000" width="970" height="720" as="geometry" />
+        </mxCell>
+        <mxCell id="g33Lg_bU7zl-0KTu_dWb-175" value="UI" style="label;whiteSpace=wrap;html=1;align=center;verticalAlign=bottom;spacingLeft=0;spacingBottom=4;imageAlign=center;imageVerticalAlign=top;image=img/clipart/Gear_128x128.png" vertex="1" parent="1">
+          <mxGeometry x="2330" y="760" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="g33Lg_bU7zl-0KTu_dWb-176" value="" style="shape=datastore;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="2360" y="980" width="60" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="g33Lg_bU7zl-0KTu_dWb-179" value="" style="shape=tapeData;whiteSpace=wrap;html=1;perimeter=ellipsePerimeter;" vertex="1" parent="1">
+          <mxGeometry x="2350" y="530" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="g33Lg_bU7zl-0KTu_dWb-181" value="" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;" vertex="1" parent="1">
+          <mxGeometry x="2330" y="650" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="g33Lg_bU7zl-0KTu_dWb-183" value="" style="shape=actor;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="2370" y="890" width="40" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="g33Lg_bU7zl-0KTu_dWb-189" value="&lt;ul&gt;&lt;li&gt;&lt;font color=&quot;#cc0000&quot;&gt;Hardware (Third Party)&lt;/font&gt;&lt;/li&gt;&lt;li&gt;Hardware (NEFSC)&lt;/li&gt;&lt;li&gt;&lt;font color=&quot;#4c0099&quot;&gt;Hardware (Unknown)&lt;/font&gt;&lt;/li&gt;&lt;/ul&gt;" style="text;strokeColor=none;fillColor=none;html=1;whiteSpace=wrap;verticalAlign=middle;overflow=hidden;" vertex="1" parent="1">
+          <mxGeometry x="2470" y="530" width="200" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="g33Lg_bU7zl-0KTu_dWb-190" value="&lt;ul&gt;&lt;li&gt;&lt;span&gt;&lt;font color=&quot;#cc0000&quot;&gt;Process (Third Party)&amp;nbsp;&lt;/font&gt;&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;span&gt;Process (NEFSC)&lt;/span&gt;&lt;br&gt;&lt;/li&gt;&lt;li&gt;&lt;font color=&quot;#4c0099&quot;&gt;Process (Unknown)&lt;/font&gt;&lt;/li&gt;&lt;/ul&gt;" style="text;strokeColor=none;fillColor=none;html=1;whiteSpace=wrap;verticalAlign=middle;overflow=hidden;" vertex="1" parent="1">
+          <mxGeometry x="2470" y="640" width="200" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="g33Lg_bU7zl-0KTu_dWb-191" value="&lt;ul&gt;&lt;li&gt;&lt;span&gt;&lt;font color=&quot;#cc0000&quot;&gt;UI (Third Party)&amp;nbsp;&lt;/font&gt;&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;span&gt;UI (NEFSC)&lt;/span&gt;&lt;br&gt;&lt;/li&gt;&lt;li&gt;&lt;font color=&quot;#4c0099&quot;&gt;UI (Unknown)&lt;/font&gt;&lt;/li&gt;&lt;/ul&gt;" style="text;strokeColor=none;fillColor=none;html=1;whiteSpace=wrap;verticalAlign=middle;overflow=hidden;" vertex="1" parent="1">
+          <mxGeometry x="2470" y="760" width="200" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="g33Lg_bU7zl-0KTu_dWb-192" value="&lt;ul&gt;&lt;li&gt;&lt;font color=&quot;#0000ff&quot;&gt;&lt;b&gt;DIS Staff&lt;/b&gt;&lt;/font&gt;&lt;/li&gt;&lt;li&gt;&lt;font color=&quot;#0000cc&quot;&gt;CRB Staff&lt;/font&gt;&lt;/li&gt;&lt;li&gt;&lt;font color=&quot;#cc0000&quot;&gt;Commercial Fisherman (non SF)&lt;/font&gt;&lt;/li&gt;&lt;li&gt;&lt;font color=&quot;#cc6600&quot;&gt;Commercial Fisherman (SF)&lt;/font&gt;&lt;/li&gt;&lt;li&gt;&lt;font color=&quot;#009900&quot;&gt;Other Research Partner&lt;/font&gt;&lt;/li&gt;&lt;/ul&gt;" style="text;strokeColor=none;fillColor=none;html=1;whiteSpace=wrap;verticalAlign=middle;overflow=hidden;" vertex="1" parent="1">
+          <mxGeometry x="2470" y="870" width="240" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="g33Lg_bU7zl-0KTu_dWb-193" value="&lt;ul&gt;&lt;li&gt;Data Storage (NEFSC)&lt;/li&gt;&lt;li&gt;&lt;font color=&quot;#cc0000&quot;&gt;Data Storage (Third Party)&lt;/font&gt;&lt;/li&gt;&lt;li&gt;&lt;font color=&quot;#4c0099&quot;&gt;Data Storage (Unknown)&lt;/font&gt;&lt;/li&gt;&lt;/ul&gt;" style="text;strokeColor=none;fillColor=none;html=1;whiteSpace=wrap;verticalAlign=middle;overflow=hidden;" vertex="1" parent="1">
+          <mxGeometry x="2470" y="960" width="240" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="g33Lg_bU7zl-0KTu_dWb-194" value="KEY" style="swimlane;" vertex="1" parent="1">
+          <mxGeometry x="2250" y="460" width="530" height="610" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
